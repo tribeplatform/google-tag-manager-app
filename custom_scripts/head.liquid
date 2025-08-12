@@ -5,9 +5,7 @@
         consentCategory: 'analytics',
         load: () => {
             const noscript = document.createElement('noscript');
-            noscript.setAttribute('data-bm-gtm', '');
             const iframe = document.createElement('iframe');
-            iframe.setAttribute('data-bm-gtm', '');
             iframe.src = `https://www.googletagmanager.com/ns.html?id={{settings.containerId}}`;
             iframe.height = '0';
             iframe.width = '0';
@@ -20,17 +18,15 @@
                 var f=d.getElementsByTagName(s)[0],
                 j=d.createElement(s),
                 dl=l!='dataLayer'?'&l='+l:'';
-                j.setAttribute('data-bm-gtm', '');
                 j.async=true;
                 j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
                 })(window,document,'script','dataLayer','{{settings.containerId}}');
         },
         unload: () => {
-            const dataBmGtm = document.querySelectorAll('[data-bm-gtm]');
-            dataBmGtm.forEach(element => {
-                element.remove();
-            });
-            
+            const iframe = document.querySelector('iframe[src*="googletagmanager.com/gtm.js"]');
+            if (iframe) {
+                iframe.parentNode.remove()
+            }
             if (window.dataLayer) {
                 window.dataLayer = [];
             }
